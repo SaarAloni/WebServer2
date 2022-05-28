@@ -1,0 +1,41 @@
+﻿@model IEnumerable<WebServer2.Models.Contact>
+
+@{
+    ViewData["Title"] = "apiTest";
+}
+
+<button onclick="getAll()">GetAll</button>
+<button onclick="get()">Get</button>
+<button onclick="post()">post</button>
+<button onclick="put()">put</button>
+<button onclick="del()">Delete</button>
+<button onclick="apiLogin()">apiLogin</button>
+<button onclick="apiInvite()">apiInvite</button>
+<button onclick="login()">login</button>
+<button onclick="getInfo()">getInfo</button>
+
+<script>
+    var token = '';
+    function login() {
+        $.ajax({
+            url: 'https://localhost:5254/api/Users?Id=e&password=e',
+            type: 'POST',
+            contentType: "application/json",
+            success: function (data) { token = data },
+            error: function () { },
+        });
+    }
+    function getInfo() {
+         $.ajax({
+            url: 'https://localhost:5254/api/Login',
+            type: 'POST',
+            contentType: "application/json",
+            success: function (data) { token = data },
+            error: function () { },
+        });
+    }
+    </script>
+
+@section Scripts{
+    <script src="~/js/rest.js"></script>
+}
