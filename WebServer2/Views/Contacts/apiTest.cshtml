@@ -27,10 +27,13 @@
     }
     function getInfo() {
          $.ajax({
-            url: 'https://localhost:5254/api/Login',
-            type: 'POST',
-            contentType: "application/json",
-            success: function (data) { token = data },
+            url: 'https://localhost:5254/api/contacts',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'bearer'+token);
+            },
+                data: {},
+                success: function (data) { console.log(data); },
             error: function () { },
         });
     }

@@ -11,12 +11,16 @@ using Microsoft.EntityFrameworkCore;
 using WebServer2.Data;
 using WebServer2.Models;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+
+
 
 namespace WebServer2.Controllers
 {
     [Route("api/Login")]
     [ApiController]
-    public class apiUsersController : ControllerBase
+    public class apiUsersController : Controller
     {
         private readonly WebServer2Context _context;
         public IConfiguration _configuration;
@@ -26,6 +30,46 @@ namespace WebServer2.Controllers
         {
             _context = context;
             _configuration = config;
+        }
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            string a = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            Contact contacts = await _context.Contact.FirstOrDefaultAsync(m => m.Id == a);
+            return Json(a);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            Signin(user);
+            return Json(user);
+        }
+
+        public async void Signin(User c)
+        {
+            HttpContext.Session.SetString("username", c.Id);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, c.Id),
+            };
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+
+            };
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity), authProperties);
         }
 
         [HttpPost]

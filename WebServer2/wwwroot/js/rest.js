@@ -5,10 +5,34 @@
 }
 
 async function get() {
-    const r = await fetch('/api/contacts/e');
+    const r = await fetch('/api/Login');
     const d = await r.json();
     console.log(d);
 }
+
+var token = '';
+function login() {
+    $.ajax({
+        url: 'https://localhost:5254/api/Users?Id=e&password=e',
+        type: 'POST',
+        contentType: "application/json",
+        success: function (data) { token = data },
+        error: function () { },
+    });
+}
+function getInfo() {
+    $.ajax({
+        url: 'https://localhost:5254/api/contacts',
+        type: 'GET',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'bearer' + token);
+        },
+        data: {},
+                success: function (data) { console.log(data); },
+        error: function () { },
+    });
+}
+
 
 async function post() {
     const r = await fetch('/api/contacts', {

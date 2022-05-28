@@ -10,7 +10,7 @@ using WebServer2.Models;
 
 namespace WebServer2.Controllers
 {
-    [Route("api/Login")]
+    [Route("api/contacts")]
     [ApiController]
     public class apiContactsController : Controller
     {

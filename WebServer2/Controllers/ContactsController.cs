@@ -24,6 +24,10 @@ namespace WebServer2.Controllers
         {
               return View(await _context.Contact.ToListAsync());
         }
+        public async Task<IActionResult> apiTest()
+        {
+            return View();
+        }
 
         // GET: Contacts/Details/5
         public async Task<IActionResult> Details(string id)
